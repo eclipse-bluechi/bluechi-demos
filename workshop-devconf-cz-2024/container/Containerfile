@@ -1,0 +1,24 @@
+FROM quay.io/fedora/fedora:40
+
+RUN dnf upgrade --refresh -y --nodocs && \
+    dnf install --nodocs \
+        python3-dasbus \
+        bluechi-controller \
+        bluechi-agent \
+        bluechi-ctl \
+        python3-bluechi \
+        podman \
+        httpd \
+        fuse-overlayfs \
+    -y && \
+    dnf -y clean all
+
+# Setup Apache
+RUN sed -i "s/^Listen 80$/Listen 8088/" /etc/httpd/conf/httpd.conf
+COPY files/html/* /var/www/html
+
+# Pull images required by container example
+RUN podman pull docker.io/mariadb:latest
+RUN podman pull docker.io/wordpress
+
+CMD [ "/sbin/init" ]

@@ -1,0 +1,6 @@
+[Unit]
+Description=Tire Sensor Service
+
+[Service]
+Type=simple
+ExecStart=python3 /var/demo/tire-sensor.py

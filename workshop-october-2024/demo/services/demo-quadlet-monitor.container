@@ -1,0 +1,12 @@
+[Unit]
+Description=Tire Monitor
+
+[Container]
+Image=localhost/tire-monitor
+StopSignal=SIGINT
+
+Network=host
+PodmanArgs=--pull=never
+
+[Service]
+Restart=no

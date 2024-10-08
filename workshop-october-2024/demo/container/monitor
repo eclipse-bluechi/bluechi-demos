@@ -1,0 +1,11 @@
+FROM quay.io/centos/centos:stream9
+
+RUN dnf upgrade --refresh --nodocs -y && \
+    dnf install python3-pip -y && \
+    dnf -y clean all
+RUN pip3 install requests
+
+RUN mkdir -p /var/demo
+COPY ./applications/monitor.py /var/demo/monitor.py
+
+CMD ["/usr/bin/python3", "/var/demo/monitor.py"]

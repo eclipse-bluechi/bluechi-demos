@@ -1,0 +1,22 @@
+FROM quay.io/centos/centos:stream9
+
+RUN dnf upgrade --refresh --nodocs -y && \
+    dnf install --nodocs epel-release -y && \
+    dnf copr enable @centos-automotive-sig/bluechi-snapshot -y && \
+    dnf install bluechi-agent \
+                bluechi-selinux \
+                systemd \
+                kmod \
+                can-utils \
+                python3-pip \
+                -y && \
+    dnf -y clean all
+RUN pip3 install requests
+
+COPY ./bluechi-config/agent-worker.conf /etc/bluechi/agent.conf.d/agent.conf
+
+RUN mkdir -p /var/demo
+COPY ./applications/monitor.py /var/demo/monitor.py
+COPY ./services/demo-monitor.service /etc/systemd/system/demo-monitor.service
+
+CMD ["/sbin/init"]

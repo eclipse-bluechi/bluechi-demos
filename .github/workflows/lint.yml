@@ -1,0 +1,21 @@
+name: Lint
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  common:
+    name: Common
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+        with:
+          submodules: "true"
+
+      - name: Check SPDX headers
+        run: |
+          ./scripts/spdx-header-check.sh
